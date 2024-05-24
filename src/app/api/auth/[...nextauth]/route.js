@@ -1,3 +1,4 @@
+//logic for login and authentication with nextauth
 import clientPromise from "@/libs/mongoClient";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth"

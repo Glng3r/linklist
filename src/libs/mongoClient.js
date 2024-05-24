@@ -1,3 +1,4 @@
+//connection setup with mongoDB
 import { MongoClient, ServerApiVersion } from "mongodb";
 if (!process.env.MONGO_URI) {
     throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')

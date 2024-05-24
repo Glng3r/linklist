@@ -1,3 +1,4 @@
+//handles login with google
 'use client';
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

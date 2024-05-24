@@ -21,7 +21,7 @@ export default async function Header() {
             <Link href={'/contact'}>Contact </Link>
           </nav>
         </div>
-        <nav className="flex items-center gap-4 text-sm text-slate-500 items-center">
+        <nav className="flex items-center gap-4 text-sm text-slate-500 ">
           {!!session && (
             <>
               <Link href={'/account'}>
