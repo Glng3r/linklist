@@ -5,6 +5,7 @@ import UsernameForm from "@/components/forms/UsernameForm";
 import { Page } from "@/models/Page";
 import mongoose from "mongoose";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import PageSettingsForm from "@/components/forms/PageSettingsForm";
 
 export default async function AccountPage({ searchParams }) {
 
@@ -17,7 +18,7 @@ export default async function AccountPage({ searchParams }) {
   const page = await Page.findOne({ owner: session?.user?.email });
   if(page){
     return(
-      <div> your page is: /{page.uri}</div>
+      <PageSettingsForm page={page} />
     )
   }
   return (
