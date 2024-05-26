@@ -2,10 +2,10 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import UsernameForm from "@/components/forms/UsernameForm";
-import { Page } from "@/models/Page";
 import mongoose from "mongoose";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
+import { Page } from "@/models/Page";
 
 export default async function AccountPage({ searchParams }) {
 
