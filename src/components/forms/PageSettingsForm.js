@@ -8,8 +8,9 @@ import { savePageSettings } from "@/actions/pageActions";
 import toast from "react-hot-toast";
 import { useState } from "react";
 export default function PageSettingsForm({ page, user }) {
-  const[bgType,setBgType] = useState(page.bgType);
-  const[bgColor,setBgColor] =useState(page.bgColor);
+  const [bgType, setBgType] = useState(page.bgType);
+  const [bgColor, setBgColor] = useState(page.bgColor);
+  const [bgImage,setBgImage] = useState(page.bgImage);
   async function saveBaseSettings(formData) {
     const result = await savePageSettings(formData);
     if (result) {
@@ -17,13 +18,32 @@ export default function PageSettingsForm({ page, user }) {
     }
 
   }
+  function handleFileChange(ev) {
+    const file = ev.target.files?.[0];
+    if (file) {
+      const data = new FormData();
+      data.set('file', file);
+      fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      }).then(response => { //if upload want to change bg
+        response.json().then(link => {
+          setBgImage(link);
+        })
+      })
+    }
+  }
   return (
     <div className="-m-4">
       {/* Page Background form */}
       <form action={saveBaseSettings}>
-        <div 
-        className="py-16 flex justify-center items-center"
-        style={{backgroundColor:bgColor}}
+        <div
+          className="py-16 flex justify-center items-center bg-cover bg-center"
+          style={
+            bgType === 'color' 
+            ? { backgroundColor: bgColor } 
+            : { backgroundImage: `url(${bgImage})`}
+          }
         >
           <div>
             <RadioTogglers
@@ -32,20 +52,34 @@ export default function PageSettingsForm({ page, user }) {
                 { value: 'color', icon: faPalette, label: 'Color' },
                 { value: 'image', icon: faImage, label: 'Image' },
               ]}
-              onChange={val=>setBgType(val)}
+              onChange={val => setBgType(val)}
             />
-            <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
-              {bgType === 'color' && (
+            {/*Changing Background Color */}
+            {bgType === 'color' && (
+              <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
                 <div className="flex gap-2 justify-center">
                   <span>Background color:</span>
-                  <input 
-                  type="color" 
-                  name="bgColor"
-                  onChange={ev=>setBgColor(ev.target.value)} 
-                  defaultValue={page.bgColor}/>
+                  <input
+                    type="color"
+                    name="bgColor"
+                    onChange={ev => setBgColor(ev.target.value)}
+                    defaultValue={page.bgColor} />
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+            {/*Changing Background Image */}
+            {bgType === 'image' && (
+              <div className="flex justify-center">
+                <label
+                  className="bg-white shadow px-4 py-2 mt-2"
+                >
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden" />
+                  Change image</label>
+              </div>
+            )}
           </div>
         </div>
         {/*Change Page info*/}
