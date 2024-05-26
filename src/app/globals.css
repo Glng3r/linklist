@@ -13,10 +13,10 @@ label.input-label{
   @apply uppercase text-gray-400 text-xs mb-2 font-semibold;
 }
 .radio-togglers{
-  @apply bg-gray-200 inline-flex p-1;
+  @apply bg-gray-200 inline-flex p-1 cursor-pointer;
 }
 .radio-togglers div{
-  @apply p-2 px-4 text-gray-500 block flex items-center gap-2;
+  @apply p-2 px-4 text-gray-500 block flex items-center gap-2 cursor-pointer;
 }
 .radio-togglers input[type="radio"]{
   @apply hidden;

@@ -1,5 +1,5 @@
 'use client';
-import { faImage, faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faCloudArrowUp, faImage, faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RadioTogglers from "../formItems/radioTogglers";
 import Image from "next/image";
@@ -10,7 +10,8 @@ import { useState } from "react";
 export default function PageSettingsForm({ page, user }) {
   const [bgType, setBgType] = useState(page.bgType);
   const [bgColor, setBgColor] = useState(page.bgColor);
-  const [bgImage,setBgImage] = useState(page.bgImage);
+  const [bgImage, setBgImage] = useState(page.bgImage);
+  //when user saves the page settings
   async function saveBaseSettings(formData) {
     const result = await savePageSettings(formData);
     if (result) {
@@ -18,18 +19,34 @@ export default function PageSettingsForm({ page, user }) {
     }
 
   }
-  function handleFileChange(ev) {
+  //when user uploads a new image to set as background
+  async function handleFileChange(ev) {
     const file = ev.target.files?.[0];
+
     if (file) {
-      const data = new FormData();
-      data.set('file', file);
-      fetch('/api/upload', {
-        method: 'POST',
-        body: data,
-      }).then(response => { //if upload want to change bg
-        response.json().then(link => {
-          setBgImage(link);
-        })
+      const uploadPromise = new Promise((resolve, reject) => {
+        //upload file and set it to state
+        const data = new FormData();
+        data.set('file', file);
+        fetch('/api/upload', {
+          method: 'POST',
+          body: data,
+        }).then(response => { //if upload want to change bg
+          if (response.ok) {
+            response.json().then(link => {
+              setBgImage(link);
+              resolve();
+            });
+          } else {
+            reject();
+          }
+        });
+      });
+
+      await toast.promise(uploadPromise, {
+        loading: 'Uploading...',
+        success: 'Uploaded!',
+        error: 'Failed to upload',
       })
     }
   }
@@ -38,11 +55,11 @@ export default function PageSettingsForm({ page, user }) {
       {/* Page Background form */}
       <form action={saveBaseSettings}>
         <div
-          className="py-16 flex justify-center items-center bg-cover bg-center"
+          className="py-4 min-h-[300px] flex justify-center items-center bg-cover bg-center"
           style={
-            bgType === 'color' 
-            ? { backgroundColor: bgColor } 
-            : { backgroundImage: `url(${bgImage})`}
+            bgType === 'color'
+              ? { backgroundColor: bgColor }
+              : { backgroundImage: `url(${bgImage})` }
           }
         >
           <div>
@@ -71,13 +88,18 @@ export default function PageSettingsForm({ page, user }) {
             {bgType === 'image' && (
               <div className="flex justify-center">
                 <label
-                  className="bg-white shadow px-4 py-2 mt-2"
+                  className="bg-white shadow px-4 py-2 mt-2 flex gap-2"
                 >
+                  <input type="hidden" name="bgImage" value={bgImage} />
                   <input
                     type="file"
                     onChange={handleFileChange}
                     className="hidden" />
-                  Change image</label>
+                  <div className="flex gap-2 items-center cursor-pointer">
+                    <FontAwesomeIcon icon={faCloudArrowUp} className="text-gray-700" />
+                    <span>Change image</span>
+                  </div>
+                </label>
               </div>
             )}
           </div>
