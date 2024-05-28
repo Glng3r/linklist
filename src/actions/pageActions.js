@@ -3,12 +3,14 @@ import mongoose from "mongoose";
 import {Page} from "@/models/Page";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route"
+import { User } from "@/models/User";
 
 export async function savePageSettings(formData) {
   mongoose.connect(process.env.MONGO_URI);
   const session = await getServerSession(authOptions);
   if (session) {
-    const dataKeys = ['displayName', 'location', 'bio', 'bgType', 'bgColor', 'bgImage'];
+    const dataKeys = ['displayName', 'location', 'bio', 'bgType', 
+    'bgColor', 'bgImage'];
     const dataToUpdate = {};
 
     for(const key of dataKeys){
@@ -20,6 +22,13 @@ export async function savePageSettings(formData) {
       { owner: session?.user?.email },
       dataToUpdate,
     );
+    if(formData.has('avatar')){
+      const avatarLink = formData.get('avatar');
+      await User.updateOne(
+        {email: session?.user?.email},
+        {image: avatarLink}
+      );
+    }
     return true;
   }
   return false;

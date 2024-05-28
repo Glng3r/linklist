@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
 import { Page } from "@/models/Page";
+import PageButtonsForm from "@/components/forms/PageButtonsForm";
 
 export default async function AccountPage({ searchParams }) {
 
@@ -18,7 +19,10 @@ export default async function AccountPage({ searchParams }) {
   const page = await Page.findOne({ owner: session?.user?.email });
   if(page){
     return(
-      <PageSettingsForm page={page} user={session.user}/>
+      <>
+            <PageSettingsForm page={page} user={session.user}/>
+            <PageButtonsForm page={page} user = {session.user}/>
+      </>
     )
   }
   return (
