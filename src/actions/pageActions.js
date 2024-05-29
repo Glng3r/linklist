@@ -51,3 +51,17 @@ export async function savePageButtons(formData){
   }
   return false;
 }
+//Saving custom links to database
+  export async function savePageLinks(links){
+    mongoose.connect(process.env.MONGO_URI);
+    const session = await getServerSession(authOptions);
+    if(session){
+      await Page.updateOne(
+        {owner:session?.user?.email},
+        {links},
+      )
+    }
+    else{
+      return false;
+    }
+  }

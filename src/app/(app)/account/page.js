@@ -7,6 +7,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
 import { Page } from "@/models/Page";
 import PageButtonsForm from "@/components/forms/PageButtonsForm";
+import PageLinksForm from "@/components/forms/PageLinksForm";
 
 export default async function AccountPage({ searchParams }) {
 
@@ -22,6 +23,7 @@ export default async function AccountPage({ searchParams }) {
       <>
             <PageSettingsForm page={page} user={session.user}/>
             <PageButtonsForm page={page} user = {session.user}/>
+            <PageLinksForm page={page} user = {session.user}/>
       </>
     )
   }

@@ -52,14 +52,15 @@ export default function PageButtonsForm({ user, page }) {
       <form action={saveButtons}>
         <h2 className="text-2xl font-bold mb-4">Buttons</h2>
         <ReactSortable
+        handle={'.handle'}
           list={activeButtons}
           setList={setActiveButtons}>
           {activeButtons.map(b => (
             <div key={b.key} className="mb-4 flex items-center">
-              <div className="w-48 flex h-full text-gray-700 p-2 gap-2 items-center">
+              <div className="w-56 flex h-full text-gray-700 p-2 gap-2 items-center">
                 <FontAwesomeIcon
                   icon={faGripLines}
-                  className="cursor-pointer text-gray-400" />
+                  className="handle cursor-ns-resize text-gray-400 p-2" />
                 <FontAwesomeIcon icon={b.icon} />
                 <span>{upperFirst(b.label)}:</span>
               </div>
