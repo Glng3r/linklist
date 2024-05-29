@@ -8,7 +8,8 @@ import SubmitButton from "../buttons/SubmitButton";
 import { savePageButtons } from "@/actions/pageActions";
 import toast from "react-hot-toast";
 import { ReactSortable } from "react-sortablejs";
-const allButtons = [
+
+export const allButtons = [
   { key: 'email', 'label': 'e-mail', icon: faEnvelope, placeholder: 'test@example.com' },
   { key: 'mobile', 'label': 'mobile', icon: faMobile, placeholder: '123-123-1234' },
   { key: 'instagram', 'label': 'instagram', icon: faInstagram, placeholder: 'https://instagram.com/...' },

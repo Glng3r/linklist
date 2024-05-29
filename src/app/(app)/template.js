@@ -1,5 +1,5 @@
 //server component
-import {Lato } from "next/font/google";
+import { Lato } from "next/font/google";
 import "../globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
@@ -8,7 +8,12 @@ import Image from 'next/image';
 import { headers } from "next/headers";
 import AppSideBar from "@/components/layout/AppSideBar";
 import { Toaster } from "react-hot-toast";
-const lato = Lato({ subsets: ["latin"],weight: ['400','700'] });
+import { Page } from "@/models/Page";
+import mongoose from "mongoose";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+const lato = Lato({ subsets: ["latin"], weight: ['400', '700'] });
 
 export const metadata = {
   title: "Create Next App",
@@ -17,29 +22,42 @@ export const metadata = {
 
 export default async function AppTemplate({ children, ...rest }) {
   const headersList = headers();
-  const url = headersList.get('next-url');
-  console.log(url);
   const session = await getServerSession(authOptions);
   if (!session) {
     return redirect('/');
   }
+  mongoose.connect(process.env.MONGO_URI);
+  const page = await Page.findOne({ owner: session.user.email });
   return (
     <html lang="en">
       <body className={lato.className}>
         <Toaster />
         <main className="flex min-h-screen">
-          <aside className="bg-white w-48 p-4 pt-8 shadow">
-            <div className="rounded-full overflow-hidden 
+          <aside className="bg-white w-48 p-4 pt-6 shadow">
+            <div className="sticky top-0 pt-2">
+              <div className="rounded-full overflow-hidden 
             aspect-square w-24 mx-auto">
-              <Image src={session.user.image} width={256} height={128}
-                alt={'avatar'} />
-            </div>
-            <div className="text-center ">
-              <AppSideBar />
+                <Image src={session.user.image} width={256} height={128}
+                  alt={'avatar'} />
+              </div>
+              {page && (
+                <Link
+                  target="_blank"
+                  href={'/'+page.uri}
+                  className="text-center mt-4 flex gap-1 items-center justify-center">
+                  <FontAwesomeIcon icon={faLink}
+                    size="lg" className="text-blue-500" />
+                  <span className="text-xl text-gray-300">/</span>
+                  <span>{page.uri}</span>
+                </Link>
+              )}
+              <div className="text-center ">
+                <AppSideBar />
+              </div>
             </div>
           </aside>
           <div className="grow">
-              {children}
+            {children}
           </div>
         </main>
       </body>
