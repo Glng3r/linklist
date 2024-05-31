@@ -1,32 +1,40 @@
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import { faInstagram, faFacebook, faDiscord, faTiktok, faYoutube, faWhatsapp, faGithub, faTelegram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faLocationDot, faMobile, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLink, faLocationDot, faMobile, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import mongoose from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 export const buttonsIcons = {
-  email:faEnvelope,
-  mobile:faPhone,
-  instagram:faInstagram,
-  facebook:faFacebook,
-  discord:faDiscord,
-  tiktok:faTiktok,
-  youtube:faYoutube,
-  whatsapp:faWhatsapp,
-  github:faGithub,
-  telegram:faTelegram,
-  
-};
+  email: faEnvelope,
+  mobile: faPhone,
+  instagram: faInstagram,
+  facebook: faFacebook,
+  discord: faDiscord,
+  tiktok: faTiktok,
+  youtube: faYoutube,
+  whatsapp: faWhatsapp,
+  github: faGithub,
+  telegram: faTelegram,
 
+};
+function buttonLink(key,value){
+  if(key === 'mobile'){
+    return 'tel:'+value;
+  }
+  if(key ==='email'){
+    return 'mailto:'+value;
+  }
+  return value;
+}
 export default async function UserPage({ params }) {
   const uri = params.uri;
   mongoose.connect(process.env.MONGO_URI);
   const page = await Page.findOne({ uri });
   const user = await User.findOne({ email: page.owner });
   return (
-    <div className="bg-blue-950 text-white">
+    <div className="bg-blue-950 text-white min-h-screen">
       <div
         className="h-36 bg-gray-400 bg-cover bg-center"
         style={
@@ -53,21 +61,34 @@ export default async function UserPage({ params }) {
       </div>
       <div className="flex gap-2 justify-center pb-4 mt-4">
         {Object.keys(page.buttons).map(buttonKey => (
-          <Link href={'/'} 
-          className="rounded-full bg-white text-blue-950 p-2 flex items-center justify-center">
-            <FontAwesomeIcon className="w-5 h-5"icon={buttonsIcons[buttonKey]} />
+          <Link href={buttonLink(buttonKey,page.buttons[buttonKey])}
+            className="rounded-full bg-white text-blue-950 p-2 flex items-center justify-center">
+            <FontAwesomeIcon className="w-5 h-5" icon={buttonsIcons[buttonKey]} />
           </Link>
         ))}
       </div>
-      <div>
+      <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6 p-4 px-8">
         {page.links.map(link => (
-          <Link href={'/'}>
-            <div>
-              icon
+          <Link
+            className="bg-indigo-800 p-2 block flex"
+            href={link.url}>
+            <div className="relative -left-4 overflow-hidden w-16 ">
+              <div className="w-16 h-16 bg-blue-700 aspect-square relative  flex items-center justify-center">
+                {link.icon && (
+                  <Image src={link.icon} 
+                  className="w-full h-full object-cover" 
+                  alt={'icon'} width={64} height={64} />
+                )}
+                {!link.icon && (
+                  <FontAwesomeIcon icon={faLink} className="w-8 h-8" />
+                )}
               </div>
-            <div>
-              <h3>{link.title}</h3>
-              <p>{link.subtitle}</p>
+            </div>
+            <div className="flex items-center justify-center shrink grow-0">
+              <div>
+                <h3>{link.title}</h3>
+                <p className="text-white/50 h-6 overflow-hidden">{link.subtitle}</p>
+              </div>
             </div>
           </Link>
         ))}
