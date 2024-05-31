@@ -1,11 +1,13 @@
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
+import { Event } from "@/models/Event";
 import { faInstagram, faFacebook, faDiscord, faTiktok, faYoutube, faWhatsapp, faGithub, faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope, faLink, faLocationDot, faMobile, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import mongoose from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
+import {Buffer} from "buffer";
 export const buttonsIcons = {
   email: faEnvelope,
   mobile: faPhone,
@@ -19,12 +21,12 @@ export const buttonsIcons = {
   telegram: faTelegram,
 
 };
-function buttonLink(key,value){
-  if(key === 'mobile'){
-    return 'tel:'+value;
+function buttonLink(key, value) {
+  if (key === 'mobile') {
+    return 'tel:' + value;
   }
-  if(key ==='email'){
-    return 'mailto:'+value;
+  if (key === 'email') {
+    return 'mailto:' + value;
   }
   return value;
 }
@@ -33,6 +35,7 @@ export default async function UserPage({ params }) {
   mongoose.connect(process.env.MONGO_URI);
   const page = await Page.findOne({ uri });
   const user = await User.findOne({ email: page.owner });
+  await Event.create({ uri: uri, type: 'view' })
   return (
     <div className="bg-blue-950 text-white min-h-screen">
       <div
@@ -61,7 +64,7 @@ export default async function UserPage({ params }) {
       </div>
       <div className="flex gap-2 justify-center pb-4 mt-4">
         {Object.keys(page.buttons).map(buttonKey => (
-          <Link href={buttonLink(buttonKey,page.buttons[buttonKey])}
+          <Link href={buttonLink(buttonKey, page.buttons[buttonKey])}
             className="rounded-full bg-white text-blue-950 p-2 flex items-center justify-center">
             <FontAwesomeIcon className="w-5 h-5" icon={buttonsIcons[buttonKey]} />
           </Link>
@@ -70,14 +73,16 @@ export default async function UserPage({ params }) {
       <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6 p-4 px-8">
         {page.links.map(link => (
           <Link
+            target="_blank"
+            ping={process.env.URL+'api/click/?url=' + btoa(link.url)}
             className="bg-indigo-800 p-2 block flex"
             href={link.url}>
             <div className="relative -left-4 overflow-hidden w-16 ">
               <div className="w-16 h-16 bg-blue-700 aspect-square relative  flex items-center justify-center">
                 {link.icon && (
-                  <Image src={link.icon} 
-                  className="w-full h-full object-cover" 
-                  alt={'icon'} width={64} height={64} />
+                  <Image src={link.icon}
+                    className="w-full h-full object-cover"
+                    alt={'icon'} width={64} height={64} />
                 )}
                 {!link.icon && (
                   <FontAwesomeIcon icon={faLink} className="w-8 h-8" />
