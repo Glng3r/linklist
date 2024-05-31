@@ -35,7 +35,7 @@ export default async function UserPage({ params }) {
   mongoose.connect(process.env.MONGO_URI);
   const page = await Page.findOne({ uri });
   const user = await User.findOne({ email: page.owner });
-  await Event.create({ uri: uri, type: 'view' })
+  await Event.create({ uri: uri,page:uri, type: 'view' })
   return (
     <div className="bg-blue-950 text-white min-h-screen">
       <div
@@ -74,7 +74,7 @@ export default async function UserPage({ params }) {
         {page.links.map(link => (
           <Link
             target="_blank"
-            ping={process.env.URL+'api/click/?url=' + btoa(link.url)}
+            ping={process.env.URL+'api/click/?url=' + btoa(link.url)+'&page='+page.uri}
             className="bg-indigo-800 p-2 block flex"
             href={link.url}>
             <div className="relative -left-4 overflow-hidden w-16 ">
