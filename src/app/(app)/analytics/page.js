@@ -62,7 +62,7 @@ export default async function AnalyticsPage() {
       <SectionBox>
         <h2 className="text-xl mb-6 text-center">Clicks:</h2>
         {page.links.map(link => (
-          <div className="flex items-center gap-4 border-t border-gray-200 py-4">
+          <div className="md:flex items-center gap-4 border-t border-gray-200 py-4">
             <div className="text-blue-500 pl-4"> {/*image */}
               <FontAwesomeIcon icon={faLink} />
             </div>
@@ -74,7 +74,7 @@ export default async function AnalyticsPage() {
             </div>
             <div>
               <div className="text-center">
-                <div className="border rounded-md p-2">
+                <div className="border rounded-md p-2 mt-1 md:mt-0">
                   <div className="text-3xl">
                     {
                       clicks
@@ -90,8 +90,8 @@ export default async function AnalyticsPage() {
               </div>
             </div>
             <div className="text-center">
-              <div className="border rounded-md p-2">
-                <div className="text-3xl">
+              <div className="border rounded-md p-2 mt-1 md:mt-0">
+                <div className="text-3xl ">
                   {clicks.filter(c => c.uri === link.url).length}
                 </div>
                 <div className="text-gray-400 text-xs uppercase font-bold">clicks total</div>

@@ -35,13 +35,15 @@ export default function HeroForm({ user }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="inline-flex items-center shadow-lg shadow-gray-700/30">
+      className="inline-flex items-center shadow-lg bg-white shadow-gray-700/30">
       <span className="bg-white py-4 pl-4">linklist.to/</span>
       <input
-        type="text" className="py-4" placeholder="username" />
+        type="text" 
+        className=""
+        style={{backgroundColor:'white',marginBottom:0,paddingLeft:0}} 
+        placeholder="username" />
       <button
-        type="submit" className="bg-blue-500 
-          text-white py-4 px-6">
+        type="submit" className="bg-blue-500 text-white py-4 px-6 whitespace-nowrap">
         Join for Free
       </button>
     </form>

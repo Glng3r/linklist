@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 export default async function Header() {
   const session = await getServerSession(authOptions);
-  console.log(session);
   return (
     <header className="bg-white border-b py-4">
       <div className="max-w-4xl flex justify-between mx-auto px-6">

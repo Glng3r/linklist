@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 
 export default function AppSideBar() {
   const path = usePathname();
-  console.log(path)
   return (
     <nav className="inline-flex flex-col text-center mt-8 text-gray-500 gap-2 ">
       {path === '/account' ? (

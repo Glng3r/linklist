@@ -77,7 +77,7 @@ export default function PageLinksForm({ page, user }) {
             handle={'.handle'}
             list={links} setList={setLinks}>
             {links.map(l => (
-              <div key={l.key} className="mt-8 flex gap-6 items-center">
+              <div key={l.key} className="mt-8 md:flex gap-6 items-center">
                 <div className="handle">
                   <FontAwesomeIcon className="text-gray-500 mr-2 cursor-ns-resize" icon={faGripLines} />
                 </div>
@@ -103,7 +103,7 @@ export default function PageLinksForm({ page, user }) {
                     </label>
                     <button 
                     onClick= {() => removeLink(l.key)}
-                    type="button" className="bg-gray-300 py-2 px-3 mb-2 h-full flex gap-2 items-center">
+                    type="button" className="w-full bg-gray-300 py-2 px-3 mb-2 h-full flex gap-2 items-center justify-center">
                     <FontAwesomeIcon icon={faTrash} />
                     <span>Remove this link</span>
                   </button>
