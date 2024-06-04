@@ -61,8 +61,8 @@ export default async function AnalyticsPage() {
       </SectionBox>
       <SectionBox>
         <h2 className="text-xl mb-6 text-center">Clicks:</h2>
-        {page.links.map(link => (
-          <div className="md:flex items-center gap-4 border-t border-gray-200 py-4">
+        {page.links.map(link => (  
+          <div key={link.title} className="md:flex items-center gap-4 border-t border-gray-200 py-4">
             <div className="text-blue-500 pl-4"> {/*image */}
               <FontAwesomeIcon icon={faLink} />
             </div>
